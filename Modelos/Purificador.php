@@ -39,4 +39,11 @@ class Purificador {
         $this->valor = $valor;
     }
     
+    public function mapear($resul){
+        $this->id          = $resul['id'];
+        $this->nombre      = $resul['nombre'];
+        $this->cantidad    = $resul['cantidad'];
+        $this->valor       = $resul['valor'];
+    }
+    
 }
