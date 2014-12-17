@@ -27,7 +27,7 @@
         echo json_encode($listaPur);
     }
     
-    function listaPurificadores($val)
+    function b($val)
     {
         $puDao = new PurificadorDAO();
         
@@ -36,7 +36,7 @@
         echo json_encode($listaPur);
     }
     
-    function listaPurificadores($val)
+    function a($val)
     {
         $puDao = new PurificadorDAO();
         
