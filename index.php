@@ -18,6 +18,18 @@
     include_once 'Controlador/InventarioControl.php';
     include_once 'Controlador/CategoriaControl.php';
     include_once 'Controlador/Tipo_inventarioControl.php';
+    
+    include_once 'Modelos/Cliente.php';
+    include_once 'Modelos/ClienteDao.php';
+    include_once 'Controlador/ClienteControl.php';
+
+    include_once 'Modelos/Referencia.php';
+    include_once 'Modelos/ReferenciaDao.php';
+    include_once 'Controlador/ReferenciaControl.php';
+    
+    include_once 'Modelos/Codeudor.php';
+    include_once 'Modelos/CodeudorDao.php';
+    include_once 'Controlador/CodeudorControl.php';
 
 
     $app->run();
