@@ -87,4 +87,47 @@ class Tipo_inventarioDAO {
         return $res;
     }
     
+    public function borrar($id){
+        $conn = new Conexion();
+        $res = -1;
+        try{
+            if($conn->conectar()){
+                $sql_str = "DELETE FROM tipo_inventario WHERE id = ".$id;
+                $sql = $conn->getConn()->prepare($sql_str);
+                
+                $res = $sql->execute();
+            }
+            else{
+                $res = -2;
+            }
+        }catch(Exception $ex){
+            $this->msg_exception = $ex->getMessage();
+        }
+        $conn->desconectar();
+        return $res;
+    }
+    
+    public function modificar($inv,$id){
+        $conn = new Conexion();
+        $res = -1;
+        try{
+            if($conn->conectar()){
+                $sql_str = "UPDATE tipo_inventario SET "
+                        . "nombre = '".$inv->getNombre()."',"
+                        . "id_categoria = ".$inv->getIdCategoria." "
+                        . "WHERE id = ".$id;
+                $sql = $conn->getConn()->prepare($sql_str);
+                
+                $res = $sql->execute();
+            }
+            else{
+                $res = -2;
+            }
+        }catch(Exception $ex){
+            $this->msg_exception = $ex->getMessage();
+        }
+        $conn->desconectar();
+        return $res;
+    }
+    
 }
