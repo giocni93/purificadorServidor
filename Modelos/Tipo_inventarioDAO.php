@@ -114,7 +114,7 @@ class Tipo_inventarioDAO {
             if($conn->conectar()){
                 $sql_str = "UPDATE tipo_inventario SET "
                         . "nombre = '".$inv->getNombre()."',"
-                        . "id_categoria = ".$inv->getIdCategoria." "
+                        . "id_categoria = ".$inv->getIdCategoria()." "
                         . "WHERE id = ".$id;
                 $sql = $conn->getConn()->prepare($sql_str);
                 
