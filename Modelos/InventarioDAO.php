@@ -64,4 +64,50 @@ class InventarioDAO {
         return $listaInv;
     }
     
+    public function borrar($id){
+        $conn = new Conexion();
+        $res = -1;
+        try{
+            if($conn->conectar()){
+                $sql_str = "DELETE FROM inventario WHERE id = ".$id;
+                $sql = $conn->getConn()->prepare($sql_str);
+                
+                $res = $sql->execute();
+            }
+            else{
+                $res = -2;
+            }
+        }catch(Exception $ex){
+            $this->msg_exception = $ex->getMessage();
+        }
+        $conn->desconectar();
+        return $res;
+    }
+    
+    public function modificar($inv,$id){
+        $conn = new Conexion();
+        $res = -1;
+        try{
+            if($conn->conectar()){
+                $sql_str = "UPDATE inventario SET "
+                        . "nombre = '".$inv->getNombre()."',"
+                        . "cantidad = ".$inv->getCantidad().","
+                        . "valor = ".$inv->getValor().","
+                        . "imagen = '".$inv->getImagen()."',"
+                        . "id_tipo_inventario = ".$inv->getId_tipo_inventario()." "
+                        . "WHERE id = ".$id;
+                $sql = $conn->getConn()->prepare($sql_str);
+                
+                $res = $sql->execute();
+            }
+            else{
+                $res = -2;
+            }
+        }catch(Exception $ex){
+            $this->msg_exception = $ex->getMessage();
+        }
+        $conn->desconectar();
+        return $res;
+    }
+    
 }
