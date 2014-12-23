@@ -59,13 +59,12 @@ class Cliente {
     }
    
     public function mapear($resul){
-        $this->cedula          = $resul['cedula'];
-        $this->cliente      = $resul['cliente'];
-        $this->direccion_casa    = $resul['direccion_casa'];
-        $this->telefono_casa       = $resul['telefono_casa'];
+        $this->cedula = $resul['cedula'];
+        $this->nombre = $resul['nombre'];
+        $this->apellido = $resul['apellido'];
         $this->direccion_oficina = $resul['direccion_oficina'];
-        $this->telefono_oficina = $resul['telefono_oficina'];
-        $this->correo = $resul['correo'];
+        $this->telefono = $resul['telefono'];
+        $this->email = $resul['email'];
     }
     
 }

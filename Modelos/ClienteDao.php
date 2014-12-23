@@ -28,24 +28,31 @@ class ClienteDao {
         
     }
     
-    public function ModificarCliente($cedula,$cliente,$direccion_casa,$telefono_casa,
-            $direccion_oficina,$telefono_oficina,$correo){
+    public function ModificarCliente($cli,$ced){
         
-       try {
-            $conn = new conexion();
-            $conn->conectar();
-            $sql = $conn->getConn()->prepare("Update cliente set "
-                    +"cliente = '"+$cliente+"',"
-                    +"direccion_casa = '"+$direccion_casa+"',"
-                    +"telefono_casa = '"+$telefono_casa+"',"
-                    +"direccion_oficina = '"+$direccion_oficina+"',"
-                    +"telefono_oficina = '"+$telefono_oficina+"',"
-                    +"correo = '"+$correo+"' where cedula = '"+$cedula+"'");
-            $sql->execute();
-            
-        } catch (Exception $ex) {
-            echo $ex->getTraceAsString();
+       $conn = new Conexion();
+       $res = -1;
+        try{
+            if($conn->conectar()){
+                $sql_str = "UPDATE cliente SET "
+                        . "nombre = '".$cli->getNombre()."',"
+                        . "apellido = '".$cli->getApellido()."',"
+                        . "direccion_oficina = '".$cli->getDireccion_oficina()."',"
+                        . "telefono = '".$cli->getTelefono()."',"
+                        . "email = '".$cli->getEmail()."'"
+                        . "WHERE cedula = ".$ced;
+                $sql = $conn->getConn()->prepare($sql_str);
+                
+                $res = $sql->execute();
+            }
+            else{
+                $res = -2;
+            }
+        }catch(Exception $ex){
+            $this->msg_exception = $ex->getMessage();
         }
+        $conn->desconectar();
+        return $res;
         
     }
     
@@ -64,38 +71,37 @@ class ClienteDao {
         
     }
     
-    public function listaClientes($val){
-            $conn = new conexion();
-            $conn->conectar();
-            $arrayclientes = null;
-        try {
-            
-            $sql = $conn->getConn()->prepare("Select * from clientes Where "
-                    +"cedula like '%"+$val+"%' OR"
-                    +"cliente like '%"+$val+"%' OR"
-                    +"correo like'%"+$val+"%'");
-            
-            $sql->execute();
-            $resultado = $sql->fetchAll();
-           foreach ($resultado as $row){
-                
-                $cli = new Cliente();
-                $cli->mapear($row);
-                $arrayclientes[] = array(
-                    "cedula" => $cli->getCedula(),
-                    "cliente" => $cli->getCliente(),
-                    "direccion_casa" => $cli->getDireccion_casa(),
-                    "telefono_casa" => $cli->getTelefono_casa(),
-                    "direccion_oficina" => $cli->getDireccion_oficina(),
-                    "telefono_oficina" =>$cli->getTelefono_oficina(),
-                    "correo" => $cli->getCorreo(),
-                );
+    public function listaClientes(){
+            $conn = new Conexion();
+            $listaCli = null;
+        try{
+            if($conn->conectar()){
+                $sql_str = "SELECT * FROM cliente;";
+                $sql = $conn->getConn()->prepare($sql_str);
+                $sql->execute();
+                $resultado = $sql->fetchAll();
+                foreach ($resultado as $row) {
+		    $cli = new Cliente();
+                    $cli->mapear($row);
+                    
+                    $listaCli[] = array(
+                        "cedula" => $cli->getCedula(),
+                        "nombre" => $cli->getNombre(),
+                        "apellido" => $cli->getApellido(),
+                        "direccion_oficina" =>$cli->getDireccion_oficina(),
+                        "telefono" =>$cli->getTelefono(),
+                        "email" =>$cli->getEmail()
+                    );
+		}
             }
-            
-        } catch (Exception $ex) {
-            echo $ex->getTraceAsString();
+            else{
+                
+            }
+        }catch(Exception $ex){
+            $this->msg_exception = $ex->getMessage();
         }
-        return $arrayclientes;
+        $conn->desconectar();
+        return $listaCli;
     }
     
     

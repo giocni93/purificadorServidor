@@ -1,7 +1,8 @@
 <?php
 
 $app->post('/cliente', 'guardarcliente');
-$app->get('/consultarcliente/:val','consultarcliente');
+$app->get('/consultarcliente','consultarcliente');
+$app->put('/modificarcliente/:ced','modificarcliente');
 
 function guardarcliente()
     {
@@ -23,13 +24,34 @@ function guardarcliente()
         
     }
     
-    function consultarcliente($val){
+    function modificarcliente($ced){
+        
+        $c = new Cliente();
+        $cDao = new ClienteDao();
+        $r = \Slim\Slim::getInstance()->request(); //pedimos a Slim que nos mande el request
+        $p = json_decode($r->getBody()); //como el request esta en json lo decodificamos
+        
+        
+        $c->setNombre($p->nombre);
+        $c->setApellido($p->apellido);
+        $c->setDireccion_oficina($p->direccion_oficina);
+        $c->setTelefono($p->telefono);
+        $c->setEmail($p->email);
+        
+        $res = $cDao->ModificarCliente($c, $ced);
+        
+        echo json_encode(array("estado"=>$res));
+        
+    }
+
+
+    function consultarcliente(){
         
         $conCli = new ClienteDao();
         
-        $consulta = $conCli->listaClientes($val);
+        $consulta = $conCli->listaClientes();
         
-        echo json_encode(array("consulta"=>$consulta));
+        echo json_encode($consulta);
         
     }
 
