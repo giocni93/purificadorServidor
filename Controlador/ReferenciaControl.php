@@ -1,7 +1,9 @@
 <?php
 
     $app->post('/referencia', 'guardarreferencia');
-    
+    $app->get('/referencia/:id','consultarreferencia');
+    $app->put('/referencia/:id','modificarreferencia');
+    $app->delete('/referencia/:id', 'borrarReferencia');
     
     function guardarreferencia()
     {
@@ -22,3 +24,41 @@
         echo json_encode(array("estado"=>$ref));  
 
     }
+    
+    function consultarreferencia($id){
+        
+        $conRef = new ReferenciaDao();
+        
+        $consulta = $conRef->listaReferencia($id);
+        
+        echo json_encode($consulta);
+        
+    }
+    
+    function borrarReferencia($id){
+        
+        $cDao = new ReferenciaDao();
+
+        $res = $cDao->borrar($id);
+        
+        echo json_encode(array("estado"=>$res));
+        
+    }
+    
+   
+   function modificarreferencia($id){
+       
+        $c = new Referencia();
+        $cDao = new ReferenciaDao();
+        $r = \Slim\Slim::getInstance()->request(); //pedimos a Slim que nos mande el request
+        $p = json_decode($r->getBody()); //como el request esta en json lo decodificamos
+        
+        
+        $c->setNombre($p->nombre);
+        $c->setTelefono($p->telefono);
+        
+        $res = $cDao->ModificarReferencia($c, $id);
+        
+        echo json_encode(array("estado"=>$res));
+       
+   }

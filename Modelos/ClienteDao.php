@@ -56,19 +56,24 @@ class ClienteDao {
         
     }
     
-    public function EliminarCliente($cedula){
-        
-        
-        try {
-            $conn = new conexion();
-            $conn->conectar();
-            $sql = $conn->getConn()->prepare("Delete * from cliente where cedula='$cedula'");
-            
-            $sql->execute();
-        } catch (Exception $ex) {
-            echo $ex->getTraceAsString();
+    public function borrar($id){
+        $conn = new Conexion();
+        $res = -1;
+        try{
+            if($conn->conectar()){
+                $sql_str = "DELETE FROM cliente WHERE cedula = ".$id;
+                $sql = $conn->getConn()->prepare($sql_str);
+                
+                $res = $sql->execute();
+            }
+            else{
+                $res = -2;
+            }
+        }catch(Exception $ex){
+            $this->msg_exception = $ex->getMessage();
         }
-        
+        $conn->desconectar();
+        return $res;
     }
     
     public function listaClientes(){

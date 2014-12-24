@@ -29,4 +29,86 @@ class CodeudorDao {
         return $resultado;
     }
     
+    public function ModificarCodeudor($cod,$id){
+        
+       $conn = new Conexion();
+       $res = -1;
+        try{
+            if($conn->conectar()){
+                $sql_str = "UPDATE codeudor SET "
+                        . "nombre = '".$cod->getNombre()."',"
+                        . "direccion_oficina = '".$cod->getDireccion_oficina()."',"
+                        . "telefono = '".$cod->getTelefono()."',"
+                        . "referencia = '".$cod->getReferencia()."',"
+                        . "telefono_referencia = '".$cod->getTelefono_referencia()."'"
+                        . "WHERE id = ".$id;
+                $sql = $conn->getConn()->prepare($sql_str);
+                
+                $res = $sql->execute();
+            }
+            else{
+                $res = -2;
+            }
+        }catch(Exception $ex){
+            $this->msg_exception = $ex->getMessage();
+        }
+        $conn->desconectar();
+        return $res;
+        
+    }
+    
+    public function borrar($id){
+        $conn = new Conexion();
+        $res = -1;
+        try{
+            if($conn->conectar()){
+                $sql_str = "DELETE FROM codeudor WHERE id = ".$id;
+                $sql = $conn->getConn()->prepare($sql_str);
+                
+                $res = $sql->execute();
+            }
+            else{
+                $res = -2;
+            }
+        }catch(Exception $ex){
+            $this->msg_exception = $ex->getMessage();
+        }
+        $conn->desconectar();
+        return $res;
+    }
+    
+    public function listaCodeudor($id){
+            $conn = new Conexion();
+            $listaCod = null;
+        try{
+            if($conn->conectar()){
+                $sql_str = "SELECT * FROM codeudor where id_cliente = $id";
+                $sql = $conn->getConn()->prepare($sql_str);
+                $sql->execute();
+                $resultado = $sql->fetchAll();
+                foreach ($resultado as $row) {
+		    $cod = new Codeudor();
+                    $cod->mapear($row);
+                    
+                    $listaCod[] = array(
+                        "id" => $cod->getId(),
+                        "cedula" => $cod->getCedula(),
+                        "nombre" => $cod->getNombre(),
+                        "direccion_oficina" => $cod->getDireccion_oficina(),
+                        "telefono" =>$cod->getTelefono(),
+                        "referencia" =>$cod->getReferencia(),
+                        "telefono_referencia" =>$cod->getTelefono_referencia()
+                    );
+		}
+            }
+            else{
+                
+            }
+        }catch(Exception $ex){
+            $this->msg_exception = $ex->getMessage();
+        }
+        $conn->desconectar();
+        return $listaCod;
+    }
+    
 }
