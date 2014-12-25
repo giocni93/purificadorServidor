@@ -30,6 +30,36 @@ class InventarioDAO {
         return $res;
     }
     
+    public function inventario($idtipo){
+        $conn = new Conexion();
+        $listaTip = null;
+        try{
+            if($conn->conectar()){
+                $sql_str = "Select * from inventario where id_tipo_inventario = $idtipo";
+                $sql = $conn->getConn()->prepare($sql_str);
+                $sql->execute();
+                $resultado = $sql->fetchAll();
+                foreach ($resultado as $row) {
+		    $t = new Inventario();
+                    $t->mapear($row);
+                    
+                    $listaTip[] = array(
+                        "id"        => $t->getId(),
+                        "nombre"    => $t->getNombre(),
+                        "valor"     => $t->getValor()
+                    );
+		}
+            }
+            else{
+                
+            }
+        }catch(Exception $ex){
+            $this->msg_exception = $ex->getMessage();
+        }
+        $conn->desconectar();
+        return $listaTip;
+    }
+    
     public function listaInv(){
         $conn = new Conexion();
         $listaInv = null;

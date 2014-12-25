@@ -4,6 +4,7 @@
     $app->get('/inventario', 'listaInv');
     $app->delete('/inventario/:id', 'borrarInv');
     $app->put('/inventario/:id', 'updateInv');
+    $app->get('/inventario/:id','inventarioresult');
     
     function registrarInv()
     {
@@ -22,6 +23,16 @@
         $res = $iDao->registrar($i);
         
         echo json_encode(array("estado"=>$res));
+
+    }
+    
+    function inventarioresult($id)
+    {
+        $iDao = new InventarioDAO();
+
+        $res = $iDao->inventario($id);
+        
+        echo json_encode($res);
 
     }
     
