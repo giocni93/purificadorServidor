@@ -10,26 +10,31 @@
     include_once 'Modelos/Inventario.php';
     include_once 'Modelos/Categoria.php';
     include_once 'Modelos/Tipo_inventario.php';
+    include_once 'Modelos/Historico.php';
+    include_once 'Modelos/Orden_pedido.php';
+    include_once 'Modelos/Cliente.php';
+    include_once 'Modelos/Referencia.php';
+    include_once 'Modelos/Codeudor.php';
+    include_once 'Modelos/Plan_pagos.php';
     
     include_once 'Modelos/InventarioDAO.php';
     include_once 'Modelos/CategoriaDAO.php';
     include_once 'Modelos/Tipo_inventarioDAO.php';
+    include_once 'Modelos/HistoricoDAO.php';
+    include_once 'Modelos/Orden_pedidoDAO.php';
+    include_once 'Modelos/ClienteDao.php';
+    include_once 'Modelos/ReferenciaDao.php';
+    include_once 'Modelos/CodeudorDao.php';
+    include_once 'Modelos/Plan_pagosDAO.php';
     
     include_once 'Controlador/InventarioControl.php';
     include_once 'Controlador/CategoriaControl.php';
     include_once 'Controlador/Tipo_inventarioControl.php';
-    
-    include_once 'Modelos/Cliente.php';
-    include_once 'Modelos/ClienteDao.php';
+    include_once 'Controlador/HistoricoControl.php';
+    include_once 'Controlador/Orden_pedidoControl.php';
     include_once 'Controlador/ClienteControl.php';
-
-    include_once 'Modelos/Referencia.php';
-    include_once 'Modelos/ReferenciaDao.php';
     include_once 'Controlador/ReferenciaControl.php';
-    
-    include_once 'Modelos/Codeudor.php';
-    include_once 'Modelos/CodeudorDao.php';
     include_once 'Controlador/CodeudorControl.php';
-
+    include_once 'Controlador/Plan_pagosControl.php';
 
     $app->run();
