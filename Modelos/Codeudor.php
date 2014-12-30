@@ -86,6 +86,15 @@ class Codeudor {
         $this->id_cliente = $id_cliente;
     }
 
-
+    public function mapear($resul){
+        $this->id          = $resul['id'];
+        $this->cedula     = $resul['cedula'];
+        $this->nombre    = $resul['nombre'];
+        $this->direccion_oficina = $resul['direccion_oficina'];
+        $this->telefono = $resul['telefono'];
+        $this->referencia = $resul['referencia'];
+        $this->telefono_referencia = $resul['telefono_referencia'];
+        $this->id_cliente = $resul['id_cliente'];
+    }
     
 }

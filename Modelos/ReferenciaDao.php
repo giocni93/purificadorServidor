@@ -26,54 +26,79 @@ class ReferenciaDao {
         
     }
     
-    public function ModificarReferencia($nombre,$telefono,$direccion,$cedula){
+     public function ModificarReferencia($ref,$id){
         
-       try {
-            $conn = new conexion();
-            $conn->conectar();
-            $sql = $conn->getConn()->prepare("Update cliente set "
-                    +"nombre = '"+$nombre+"',"
-                    +"telefono = '"+$telefono+"',"
-                    +"direccion = '"+$direccion+"',"
-                    +"where cedula = '"+$cedula+"'");
-            $sql->execute();
-            
-        } catch (Exception $ex) {
-            echo $ex->getTraceAsString();
+       $conn = new Conexion();
+       $res = -1;
+        try{
+            if($conn->conectar()){
+                $sql_str = "UPDATE referencia_cliente SET "
+                        . "nombre = '".$ref->getNombre()."',"
+                        . "telefono = '".$ref->getTelefono()."'"
+                        . "WHERE id = ".$id;
+                $sql = $conn->getConn()->prepare($sql_str);
+                
+                $res = $sql->execute();
+            }
+            else{
+                $res = -2;
+            }
+        }catch(Exception $ex){
+            $this->msg_exception = $ex->getMessage();
         }
+        $conn->desconectar();
+        return $res;
         
     }
     
-    public function listaReferencia($val){
-            $conn = new conexion();
-            $conn->conectar();
-            $arrayreferencia = null;
-        try {
-            
-            $sql = $conn->getConn()->prepare("Select * from referencia Where "
-                    +"cedula like '%"+$val+"%' OR"
-                    +"nombre like '%"+$val+"%'");
-            
-            $sql->execute();
-            $resultado = $sql->fetchAll();
-           foreach ($resultado as $row){
+    public function borrar($id){
+        $conn = new Conexion();
+        $res = -1;
+        try{
+            if($conn->conectar()){
+                $sql_str = "DELETE FROM referencia_cliente WHERE id = ".$id;
+                $sql = $conn->getConn()->prepare($sql_str);
                 
-                $ref = new Referencia();
-                $ref->mapear($row);
-                $arrayreferencia[] = array(
-                    "id" =>$ref->getId(),
-                    "nombre" => $ref->getNombre(),
-                    "telefono" => $ref->getTelefono(),
-                    "direccion" => $ref->getDireccion(),
-                    "cedula" => $ref->getCedula(),
-                    "cedula_cliente" => $ref->getCedula_cliente(),
-                );
+                $res = $sql->execute();
             }
-            
-        } catch (Exception $ex) {
-            echo $ex->getTraceAsString();
+            else{
+                $res = -2;
+            }
+        }catch(Exception $ex){
+            $this->msg_exception = $ex->getMessage();
         }
-        return $arrayreferencia;
+        $conn->desconectar();
+        return $res;
+    }
+    
+    public function listaReferencia($id){
+            $conn = new Conexion();
+            $listaRef = null;
+        try{
+            if($conn->conectar()){
+                $sql_str = "SELECT * FROM referencia_cliente where id_cliente = $id";
+                $sql = $conn->getConn()->prepare($sql_str);
+                $sql->execute();
+                $resultado = $sql->fetchAll();
+                foreach ($resultado as $row) {
+		    $ref = new Referencia();
+                    $ref->mapear($row);
+                    
+                    $listaRef[] = array(
+                        "nombre" => $ref->getNombre(),
+                        "telefono" => $ref->getTelefono(),
+                        "id" =>$ref->getId()
+                    );
+		}
+            }
+            else{
+                
+            }
+        }catch(Exception $ex){
+            $this->msg_exception = $ex->getMessage();
+        }
+        $conn->desconectar();
+        return $listaRef;
     }
     
 }

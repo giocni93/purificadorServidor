@@ -3,6 +3,7 @@
 $app->post('/cliente', 'guardarcliente');
 $app->get('/consultarcliente','consultarcliente');
 $app->put('/modificarcliente/:ced','modificarcliente');
+$app->delete('/cliente/:id', 'borrarCliente');
 
 function guardarcliente()
     {
@@ -55,4 +56,12 @@ function guardarcliente()
         
     }
 
-    
+    function borrarCliente($id){
+        
+        $cDao = new ClienteDao();
+
+        $res = $cDao->borrar($id);
+        
+        echo json_encode(array("estado"=>$res));
+        
+    }

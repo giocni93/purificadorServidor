@@ -55,9 +55,7 @@ class Referencia {
         $this->id          = $resul['id'];
         $this->nombre      = $resul['nombre'];
         $this->telefono    = $resul['telefono'];
-        $this->direccion       = $resul['direccion'];
-        $this->cedula = $resul['cedula'];
-        $this->cedula_cliente = $resul['cedula_cliente'];
+        $this->cedula_cliente = $resul['id_cliente'];
     }
     
 }
