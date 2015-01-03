@@ -37,8 +37,6 @@
     include_once 'Controlador/CodeudorControl.php';
     include_once 'Controlador/PlanPagoControl.php';
 
-    include_once 'Modelos/OrdenPedido.php';
-    include_once 'Modelos/OrdenPedidoDao.php';
-    include_once 'Controlador/OrdenPedidoControl.php';
+    
     
     $app->run();

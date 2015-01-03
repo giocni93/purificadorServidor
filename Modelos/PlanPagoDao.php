@@ -17,8 +17,8 @@ class PlanPagoDao {
                     . "'".$re->getTipo()."',"
                     . "'".$re->getMonto()."',"
                     . "" .$re->getNumero_cuota().","
-                    . "" .$re->getFecha_credito().","
-                    . "'".$re->getId_orden_pedido()."');";
+                    . "'" .$re->getFecha_credito()."',"
+                    . "" .$re->getId_orden_pedido().");";
             $sql = $conn->getConn()->prepare($sql_str);
             $resultado = $sql->execute();
         }
