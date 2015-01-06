@@ -75,6 +75,61 @@ class Orden_pedidoDAO {
         return $listaOrden;
     }
     
+    public function listaOrden_porClienteMan($cedula){
+        $conn = new Conexion();
+        $listaOrden = null;
+        try{
+            if($conn->conectar()){
+                $sql_str = "SELECT op.*, MAX(m.fecha_realizacion) as fechaVen
+                            FROM orden_pedido op LEFT JOIN mantenimiento m ON (m.id_orden_pedido = op.id) 
+                            WHERE op.id_cliente = ".$cedula." 
+                            GROUP BY id
+                            ORDER BY op.fecha DESC";
+                $sql = $conn->getConn()->prepare($sql_str);
+                $sql->execute();
+                $resultado = $sql->fetchAll();
+                $f = new DateTime();
+                $fecha_f = $f->format('Y-m-d');
+                foreach ($resultado as $row) {
+		    $o = new Orden_pedido();
+                    $o->mapear($row);
+                    
+                    $estado = "<p style='color:green; margin: 0;'>Al dia</p>";
+                    if($row['fechaVen'] != null){
+                        if($this->meses_transcurridos($row['fechaVen'] , $fecha_f) >= 6){
+                            $estado = "<p style='color:red; margin: 0;'>Vencido</p>";
+                        }
+                    }else{
+                        if($row['fecha'] != null){
+                            if($this->meses_transcurridos($row['fecha'] , $fecha_f) >= 6){
+                                $estado = "<p style='color:red; margin: 0;'>Vencido</p>";
+                            }
+                        }else{
+                            $estado = "--";
+                        }
+                    }
+                    
+                    $listaOrden[] = array(
+                        "Id"                => $o->getId(),
+                        "Fecha"             => $o->getFecha(),
+                        "Descripcion"       => $o->getDescripcion(),
+                        "FechaInstalacion"  => $o->getFechaInstalacion(),
+                        "idCliente"         => $o->getIdCliente(),
+                        "idInventario"      => $o->getIdInventario(),
+                        "Estado"            => $estado
+                    );
+		}
+            }
+            else{
+                
+            }
+        }catch(Exception $ex){
+            $this->msg_exception = $ex->getMessage();
+        }
+        $conn->desconectar();
+        return $listaOrden;
+    }
+    
     public function capturaID(){
         $conn = new Conexion();
         //$listaOrden = null;
@@ -123,6 +178,18 @@ class Orden_pedidoDAO {
         $conn->desconectar();
         return $resultado;
         
+    }
+    
+    function meses_transcurridos($fecha_i,$fecha_f)
+    {
+            $datetime1 = new DateTime($fecha_i);
+            $datetime2 = new DateTime($fecha_f);
+            
+            $datetime1 = new DateTime($datetime1->format("Y-m-d"));
+            $datetime2 = new DateTime($datetime2->format("Y-m-d"));
+            
+            $interval = $datetime1->diff($datetime2);
+            return $interval->format('%m');
     }
     
 }

@@ -4,6 +4,15 @@ $app->post('/cliente', 'guardarcliente');
 $app->get('/consultarcliente','consultarcliente');
 $app->put('/modificarcliente/:ced','modificarcliente');
 $app->delete('/cliente/:id', 'borrarCliente');
+$app->get('/cliente/mantenimiento','clienteMantenimiento');
+
+function clienteMantenimiento(){
+    $conCli = new ClienteDao();
+        
+    $consulta = $conCli->listaClientesMan();
+
+    echo json_encode($consulta);
+}
 
 function guardarcliente()
     {
