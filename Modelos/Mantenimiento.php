@@ -5,7 +5,7 @@ class Mantenimiento {
     private $id;
     private $asesor;
     private $fecha;
-    private $fechaProgramaga;
+    private $fechaProgramada;
     private $fechaRealizacion;
     private $nombreTecnico;
     private $observacion;
@@ -32,8 +32,8 @@ class Mantenimiento {
         return $this->fecha;
     }
 
-    function getFechaProgramaga() {
-        return $this->fechaProgramaga;
+    function getFechaProgramada() {
+        return $this->fechaProgramada;
     }
 
     function getFechaRealizacion() {
@@ -64,8 +64,8 @@ class Mantenimiento {
         $this->fecha = $fecha;
     }
 
-    function setFechaProgramaga($fechaProgramaga) {
-        $this->fechaProgramaga = $fechaProgramaga;
+    function setFechaProgramada($fechaProgramada) {
+        $this->fechaProgramada = $fechaProgramada;
     }
 
     function setFechaRealizacion($fechaRealizacion) {
@@ -89,7 +89,7 @@ class Mantenimiento {
         $this->id                       = $row['id'];
         $this->asesor                   = $row['asesor'];
         $this->fecha                    = $row['fecha'];
-        $this->fechaProgramaga          = $row['fecha_programada'];
+        $this->fechaProgramada          = $row['fecha_programada'];
         $this->fechaRealizacion         = $row['fecha_realizacion'];
         $this->nombreTecnico            = $row['nombre_tecnico'];
         $this->observacion              = $row['observacion'];

@@ -1,5 +1,42 @@
  <?php
     require('fpdf/fpdf.php');
+    include_once 'Conexion/conexion.php';
+    if(isset($_GET['idOrden'])){
+        $id = $_GET['idOrden'];
+    }
+    // ########## CONSULTA DE DATOS ###########
+        $conn = new Conexion();
+        if($conn->conectar()){
+                $idM = "";
+                if(isset($_GET['idMan'])){
+                    $idM = $_GET['idMan'];
+                }
+                else{
+                    $sql_str = "SELECT MAX(id) as idMan FROM mantenimiento WHERE id_orden_pedido = ".$id;
+                    $sql = $conn->getConn()->prepare($sql_str);
+                    $sql->execute();
+                    $resultado = $sql->fetchAll();
+
+                    foreach ($resultado as $row) {
+                        $idM = $row['idMan'];
+                    }
+                }
+                $sql_str = "SELECT m.*,inv.nombre as nombreInv,ti.nombre as nombreTipo,CONCAT(c.nombre,' ',c.apellido) as nombreCliente,
+                            c.direccion_oficina,c.telefono 
+                            FROM mantenimiento m 
+                            INNER JOIN orden_pedido op ON (op.id = m.id_orden_pedido) 
+                            INNER JOIN cliente c ON (c.cedula = op.id_cliente) 
+                            INNER JOIN inventario inv ON (inv.id = op.id_inventario)
+                            INNER JOIN tipo_inventario ti ON (ti.id = inv.id_tipo_inventario) 
+                            WHERE m.id = ".$idM;
+                
+                $sql = $conn->getConn()->prepare($sql_str);
+                $sql->execute();
+                $resultado = $sql->fetchAll();
+
+            }
+    // ########################################
+    
     $letra  = 'Arial';
     $tamano = 8;  
     
@@ -8,19 +45,31 @@
     $f = new DateTime();
     
     // ########## VARIABLES DE DATOS ###########
-        $fecha_actual = $f->format('Y-m-d');
-        $numMantenimiento = '009009';
-        $nombre_cliente = "Gilmar Ocampo Nieves";
-        $ciudad = "Valledupar";
-        $direccion = "Cra 6 # 18a - 72";
-        $telefono = "3004061405 - 5841611";
-        $purificador = "Punta negra";
-        $tipo_purificador = "Acero";
-        $nombre_tecnico = "Fabio Andres rojas gulloso";
-        $motivo_visita = "Entrego purificador luego de reparacion, cambio de botones + mantenimiento del filtro. "
-                . "y no se que mas colocar uwhwhwhwhhawhauehiwuhaiushaidusa asdada akhk hask asjdh kajshdk ajsd";
-        $observacion = "jajjajjajaj";
-        
+        foreach ($resultado as $row) {
+            $idO = $row['id_orden_pedido'];
+            $fecha_actual = $row['fecha'];
+            $fechaProgramada = $row['fecha_programada'];
+            $numMantenimiento = $row['id'];
+            $nombre_cliente = $row['nombreCliente'];
+            $ciudad = $row['ciudad'];
+            $direccion = $row['direccion_oficina'];
+            $telefono = $row['telefono'];
+            $purificador = $row['nombreInv'];
+            $tipo_purificador = $row['nombreTipo'];
+            $nombre_tecnico = $row['nombre_tecnico'];
+            $motivo_visita = $row['motivo'];
+            $observacion = $row['observacion'];
+            
+            $asesor = '';
+            if($row['asesor'] != null){
+                $asesor = $row['asesor'];
+            }
+            
+            $fechaRealizacion = '';
+            if($row['fecha_realizacion' != null]){
+                $fechaRealizacion = $row['fecha_realizacion'];
+            }
+        }
     // #########################################
     
     
@@ -28,22 +77,28 @@
         $pdf->SetFont($letra,'B',$tamano);
         $pdf->Cell(131,6,'PROGRAMADA PARA:   ',0,0,'R');
             $pdf->SetFont($letra,'',$tamano+2);
-            $pdf->Cell(0,6,'26-01-2015',0,1,'L');
+            $pdf->Cell(0,6,$fechaProgramada,0,1,'L');
             
         $pdf->SetFont($letra,'B',$tamano);
         $pdf->Cell(120,6,'No. TARJETA:   ',0,0,'R');
             $pdf->SetFont($letra,'',$tamano+2);
-            $pdf->Cell(0,6,'93',0,1,'L');
+            $pdf->Cell(0,6,$idO,0,1,'L');
             
         $pdf->SetFont($letra,'B',$tamano);
         $pdf->Cell(108,6,'FECHA',0,1,'R');
         $pdf->Cell(119,1,'REALIZACION: ',0,0,'R');
             $pdf->SetFont($letra,'',$tamano+2);
-            $pdf->Cell(0,1,'03-01-2015',0,1,'L');
+            $pdf->Cell(0,1,$fechaRealizacion,0,1,'L');
+            
+            $pdf->Ln(5);
             
         $pdf->SetFont($letra,'B',$tamano);
-        $pdf->Cell(131,13,'ASESOR PROGRAMA:   ',0,1,'R');
+        $pdf->Cell(131,0,'ASESOR PROGRAMA:   ',0,0,'R');
+            $pdf->SetFont($letra,'',$tamano+2);
+            $pdf->Cell(0,0,$asesor,0,1,'L');
         
+            $pdf->Ln(6);
+            
         $pdf->SetFont($letra,'B',$tamano);
         $pdf->Cell(127,0,'FECHA SOLICITUD:   ',0,0,'R');
             $pdf->SetFont($letra,'',$tamano+2);
