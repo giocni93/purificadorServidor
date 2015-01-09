@@ -19,8 +19,8 @@ $telefono = $_POST["txttelefono"];
 
 //$modelo_name = $modelo[1];
 
-$tipo_modelo = $_POST["ocultartipo"];
-$modelo  = $_POST["ocultarmodelo"];
+$tipo_modelo = $_POST["ocultarmodelo"]; 
+$modelo  = $_POST["ocultartipo"];
 
 //////////
 $pdf->SetFont($letra,'B',$tamaño);
