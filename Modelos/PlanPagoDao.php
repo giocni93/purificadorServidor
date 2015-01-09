@@ -30,6 +30,31 @@ class PlanPagoDao {
         
     }
     
+    public function capturaMaxID(){
+        $conn = new Conexion();
+        //$listaOrden = null;
+        $id = "";
+        try {
+            if($conn->conectar()){
+                $sql_str = "SELECT Max(id) as id from plan_pagos";
+                $sql = $conn->getConn()->prepare($sql_str);
+                $sql->execute();
+                $resultado = $sql->fetchAll();
+                $orden = null;
+                foreach ($resultado as $row){
+                    $orden = new PlanPago();
+                    $id = $row['id'];
+                }
+                
+            }else{
+                
+            }
+            return $id;
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+        }
+    
     public function listaplan_porOrden($id){
         $conn = new Conexion();
         $listaOrden = null;
