@@ -2,6 +2,7 @@
 
     $app->post('/referencia', 'guardarreferencia');
     $app->get('/referencia/:id','consultarreferencia');
+    $app->get('/referencia','listaRef');
     $app->put('/referencia/:id','modificarreferencia');
     $app->delete('/referencia/:id', 'borrarReferencia');
     
@@ -30,6 +31,16 @@
         $conRef = new ReferenciaDao();
         
         $consulta = $conRef->listaReferencia($id);
+        
+        echo json_encode($consulta);
+        
+    }
+    
+    function listaRef(){
+        
+        $conRef = new ReferenciaDao();
+        
+        $consulta = $conRef->listaRef();
         
         echo json_encode($consulta);
         

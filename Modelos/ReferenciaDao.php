@@ -101,4 +101,39 @@ class ReferenciaDao {
         return $listaRef;
     }
     
+    public function listaRef(){
+            $conn = new Conexion();
+            $listaRef = null;
+        try{
+            if($conn->conectar()){
+                $sql_str = "SELECT r.*,CONCAT(c.nombre,' ',c.apellido) as nomCliente ,
+                            c.telefono as telefonoCli,c.direccion_oficina as DireccionCli
+                            FROM referencia_cliente r 
+                            INNER JOIN cliente c ON (c.cedula = r.id_cliente)";
+                $sql = $conn->getConn()->prepare($sql_str);
+                $sql->execute();
+                $resultado = $sql->fetchAll();
+                foreach ($resultado as $row) {
+		    $ref = new Referencia();
+                    $ref->mapear($row);
+                    
+                    $listaRef[] = array(
+                        "nombre" => $ref->getNombre(),
+                        "telefono" => $ref->getTelefono(),
+                        "NombreCliente" =>$row['nomCliente'],
+                        "TelefonoCliente" =>$row['telefonoCli'],
+                        "DireccionCli" =>$row['DireccionCli']
+                    );
+		}
+            }
+            else{
+                
+            }
+        }catch(Exception $ex){
+            $listaRef = $this->msg_exception = $ex->getMessage();
+        }
+        $conn->desconectar();
+        return $listaRef;
+    }
+    
 }
