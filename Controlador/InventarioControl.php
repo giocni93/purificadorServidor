@@ -5,6 +5,17 @@
     $app->delete('/inventario/:id', 'borrarInv');
     $app->put('/inventario/:id', 'updateInv');
     $app->get('/inventario/:id','inventarioresult');
+    $app->get('/precioinventario/:id','consultaprecio');
+    
+    function consultaprecio($id)
+    {
+        $iDao = new InventarioDAO();
+
+        $res = $iDao->precio($id);
+        
+        echo json_encode($res);
+
+    }
     
     function registrarInv()
     {
