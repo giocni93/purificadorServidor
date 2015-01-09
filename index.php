@@ -17,7 +17,10 @@
     include_once 'Modelos/Codeudor.php';
     include_once 'Modelos/PlanPago.php';
     include_once 'Modelos/Detalle_PlanPago.php';
+
     include_once 'Modelos/Mantenimiento.php';
+    include_once 'Modelos/Usuario.php';
+
     
     include_once 'Modelos/InventarioDAO.php';
     include_once 'Modelos/CategoriaDAO.php';
@@ -29,7 +32,10 @@
     include_once 'Modelos/CodeudorDao.php';
     include_once 'Modelos/PlanPagoDao.php';
     include_once 'Modelos/Detalle_PlanPagoDAO.php';
+
     include_once 'Modelos/MantenimientoDAO.php';
+    include_once 'Modelos/UsuarioDao.php';
+
     
     include_once 'Controlador/InventarioControl.php';
     include_once 'Controlador/CategoriaControl.php';
@@ -41,7 +47,9 @@
     include_once 'Controlador/CodeudorControl.php';
     include_once 'Controlador/PlanPagoControl.php';
     include_once 'Controlador/Detalle_PlanPagoControl.php';
+
     include_once 'Controlador/MantenimientoControl.php';
-    
+    include_once 'Controlador/UsuarioControl.php';
+
     
     $app->run();
