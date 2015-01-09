@@ -19,6 +19,7 @@
         $i->setValor($p->valor);
         $i->setImagen($p->imagen);
         $i->setId_tipo_inventario($p->idTipo);
+        $i->setImagen($p->imagen);
         
         $res = $iDao->registrar($i);
         
