@@ -7,8 +7,17 @@ class Cliente {
     private $nombre;
     private $apellido;
     private $direccion_oficina;
+    private $direccion_casa;
     private $telefono;
     private $email;
+    
+    function getDireccion_casa() {
+        return $this->direccion_casa;
+    }
+
+    function setDireccion_casa($direccion_casa) {
+        $this->direccion_casa = $direccion_casa;
+    }
     
     function getCedula() {
         return $this->cedula;
@@ -25,7 +34,7 @@ class Cliente {
     function getDireccion_oficina() {
         return $this->direccion_oficina;
     }
-
+    
     function getTelefono() {
         return $this->telefono;
     }

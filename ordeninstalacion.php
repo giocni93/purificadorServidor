@@ -22,7 +22,7 @@ $telefono = $_POST["txttelefono"];
 
 $tipo_modelo = $_POST["cboxCategoria"]; 
 $modelo  = $_POST["cboxinventario"];
-
+$vendedor = $_POST["cboxvendedor"];
 
     $conn = new Conexion();
     $nombre_tipo = "";
@@ -63,7 +63,7 @@ $pdf->Cell(34,-100,'Telefono: '.$telefono,0,1,'L');
 $pdf->Cell(74,120,'Modelo De Purificador Instalado: '.$nombre_tipo,0,1,'L');
 $pdf->Cell(25,-100,'Tipo: '.$nombre_inventario,0,1,'L');
 $pdf->Cell(43,120,'Observaciones:',0,1,'L');
-$pdf->Cell(20,0,'Nombre Del Tecnico Instalador:',0,1,'L');
+$pdf->Cell(20,0,'Nombre Del Tecnico Instalador:'.$vendedor,0,1,'L');
 $pdf->Cell(120,20,'Recibido De Conformidad Por Parte Del Cliente:',0,1,'L');
 $pdf->Cell(0,30,'Nombre: ',0,1,'L');$pdf->Cell(0,-30,'Firma Y Cedula: ',0,1,'C');
 $pdf->Cell(0,50,' _______________________________ ',0,1,'L');$pdf->Cell(228,-50,'_________________________________',0,1,'C');
