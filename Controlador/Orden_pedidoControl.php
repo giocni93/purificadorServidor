@@ -3,6 +3,7 @@
     $app->post('/orden_pedido','guardarpedido');
     $app->get('/orden_pedido/idcedula/:id_cliente', 'imprimir_orden');
     $app->get('/orden_pedido/clienteMan/:cedula', 'listaOrdMan');
+    $app->get('/orden_pedido/idOrden/:id', 'listaOrdenFull');
     
    
 
@@ -10,6 +11,15 @@
         $oDao = new Orden_pedidoDAO();
         
         $res = $oDao->listaOrden_porCliente($cedula);
+        
+        echo json_encode($res);
+        //echo date("Y-m-d", strtotime("+1 month", strtotime("2014-10-31") )); 
+    }
+    
+    function listaOrdenFull($id){
+        $oDao = new Orden_pedidoDAO();
+        
+        $res = $oDao->orden_cli($id);
         
         echo json_encode($res);
         //echo date("Y-m-d", strtotime("+1 month", strtotime("2014-10-31") )); 

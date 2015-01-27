@@ -1,0 +1,44 @@
+ 		$('#butonSUbir').click(function()
+                {
+                    var fileExtension = "";
+                    var file = $("#txtImagen2")[0].files[0];
+                    var fileName = file.name;
+                    fileExtension = fileName.substring(fileName.lastIndexOf('.') + 1);
+
+                    if(isImage(fileExtension)){
+                        var formData = new FormData($(".frmInv2")[0]);
+                        $.ajax({
+                            url: servidor+'upload.php?n='+fileName+"&e="+fileExtension,  
+                            type: 'POST',
+                            data: formData,
+                            cache: false,
+                            contentType: false,
+                            processData: false,
+                            //una vez finalizado correctamente
+                            success: function(data){
+                                document.getElementById("barInv2").value = 100;
+                                document.getElementById("imgInv2").setAttribute("src",servidor+"imagenes/"+data);
+                            },
+                            //si ha ocurrido un error
+                            error: function(){
+                                alert("error img");
+                            }
+                        });
+                    }
+                    else{
+                        alert("solo se permiten imagenes");
+                    }
+                });
+
+                function isImage(extension)
+                {
+                    switch(extension.toLowerCase()) 
+                    {
+                        case 'jpg': case 'gif': case 'png': case 'jpeg':
+                            return true;
+                        break;
+                        default:
+                            return false;
+                        break;
+                    }
+                }

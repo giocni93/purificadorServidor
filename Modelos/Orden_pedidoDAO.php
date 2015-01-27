@@ -10,7 +10,7 @@ class Orden_pedidoDAO {
         $listaimpresion= null;
         try{
             if($conn->conectar()){
-                $sql_str = "select  orden_pedido.*, cliente.nombre as nomcli, cliente.apellido, cliente.direccion_oficina,"
+                $sql_str = "select  orden_pedido.*,cliente.cedula as ced, cliente.nombre as nomcli, cliente.apellido, cliente.direccion_oficina,"
                         . "cliente.telefono, inventario.nombre from orden_pedido inner join cliente "
                         . "on orden_pedido.id_cliente = cliente.cedula inner join inventario "
                         . "on orden_pedido.id_inventario = inventario.id where id_cliente='".$id_cliente."'";
@@ -27,7 +27,8 @@ class Orden_pedidoDAO {
                         "apellido_cliente"  =>$row['apellido'],
                         "direccion_cliente" =>$row['direccion_oficina'],
                         "telefono_cliente"  =>$row['telefono'],
-                        "inventario_nombre" =>$row['nombre']
+                        "inventario_nombre" =>$row['nombre'],
+                        "cedula"            =>$row['ced']
                     );
                     
 		}
@@ -63,6 +64,32 @@ class Orden_pedidoDAO {
                         "idCliente"         => $o->getIdCliente(),
                         "idInventario"      => $o->getIdInventario()
                     );
+		}
+            }
+            else{
+                
+            }
+        }catch(Exception $ex){
+            $this->msg_exception = $ex->getMessage();
+        }
+        $conn->desconectar();
+        return $listaOrden;
+    }
+    
+    public function orden_cli($id){
+        $conn = new Conexion();
+        $listaOrden = null;
+        try{
+            if($conn->conectar()){
+                $sql_str = "SELECT * FROM orden_pedido WHERE id=".$id;
+                $sql = $conn->getConn()->prepare($sql_str);
+                $sql->execute();
+                $resultado = $sql->fetchAll();
+                foreach ($resultado as $row) {
+		    $o = new Orden_pedido();
+                    $o->mapear($row);
+                    
+                    $listaOrden = $o->getIdCliente();
 		}
             }
             else{
