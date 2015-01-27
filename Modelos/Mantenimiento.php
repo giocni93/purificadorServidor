@@ -11,7 +11,16 @@ class Mantenimiento {
     private $observacion;
     private $motivo;
     private $ciudad;
+    private $valorPagado;
     
+    function getValorPagado() {
+        return $this->valorPagado;
+    }
+
+    function setValorPagado($valorPagado) {
+        $this->valorPagado = $valorPagado;
+    }
+
     function getCiudad() {
         return $this->ciudad;
     }

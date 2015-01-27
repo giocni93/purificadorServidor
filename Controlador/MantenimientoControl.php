@@ -45,6 +45,11 @@
         $m->setObservacion($p->observacion);
         $m->setNombreTecnico($p->nombreTecnico);
         $m->setFechaRealizacion($p->fechaRealizacion);
+        $m->setValorPagado($p->valorPagado);
+        
+        if($m->getValorPagado() == ""){
+            $m->setValorPagado(0);
+        }
         
         $res = $oDao->update($m,$id);
         
@@ -54,6 +59,10 @@
         
         $idCliente = $mDao->orden_cli($idOrd);
         registrarHistoManUp($idCliente,$m->getObservacion(),$id);
+        
+        if($m->getValorPagado() != 0){
+            registrarHistopagoMan($idCliente,$m->getValorPagado(),$id);
+        }
     }
     
     function agregarMan($idOrden){
@@ -92,6 +101,7 @@
         $h->setObservacion("Se ha realizado una nueva orden de mantenimiento correspondiente al "
                 . "orden de pedido # ".$idOrd." con el siguiente motivo: \n\n".$motivo);
         $h->setIdCliente($id);
+        $h->setTipo("Matenimiento");
         
         $res = $hDao->registrar($h);
         
@@ -114,6 +124,29 @@
         $h->setObservacion("Se ha actualizado los resultados del mantenimiento # ".$idMan." especificando la siguiente "
                 . "observacion: \n\n".$obs);
         $h->setIdCliente($id);
+        $h->setTipo("Matenimiento");
+        
+        $res = $hDao->registrar($h);
+        
+        //echo json_encode(array("estado"=>$res));
+
+        //$fecha = new DateTime();
+        //echo $fecha->format('Y-m-d H:i:s') . "\n";
+        
+        //echo date("Y-m-d h:i A", strtotime("2013-01-19 15:42:00"));
+    }
+    
+    function registrarHistopagoMan($id,$obs,$idMan)
+    {
+        $h = new Historico();
+        $hDao = new HistoricoDAO();
+        $fecha = new DateTime();
+
+        $h->setFecha($fecha->format('Y-m-d H:i:s'));
+        $h->setTitulo("Pago del mantenimiento # ".$idMan);
+        $h->setObservacion("Se ha realizado un pago al mantenimiento # ".$idMan." con un valor de $".$obs);
+        $h->setIdCliente($id);
+        $h->setTipo("Pago matenimiento");
         
         $res = $hDao->registrar($h);
         

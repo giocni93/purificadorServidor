@@ -9,11 +9,12 @@ class HistoricoDAO {
         $res = -1;
         try{
             if($conn->conectar()){
-                $sql_str = "INSERT INTO historico (fecha,titulo,observacion,id_cliente) "
+                $sql_str = "INSERT INTO historico (fecha,titulo,observacion,id_cliente,tipo) "
                         . "VALUES ('".$h->getFecha()."',"
                         . "'".$h->getTitulo()."',"
                         . "'".nl2br($h->getObservacion())."',"
-                        . "'".$h->getIdCliente()."');";
+                        . "'".$h->getIdCliente()."',"
+                        . "'".$h->getTipo()."');";
                 $sql = $conn->getConn()->prepare($sql_str);
                 
                 $res = $sql->execute();
@@ -45,7 +46,8 @@ class HistoricoDAO {
                         "Id"            => $h->getId(),
                         "Fecha"         => date("Y-m-d h:i A", strtotime($h->getFecha())),
                         "Titulo"        => $h->getTitulo(),
-                        "Observacion"   => $h->getObservacion()
+                        "Observacion"   => $h->getObservacion(),
+                        "Tipo"          => $row['tipo']
                     );
 		}
             }

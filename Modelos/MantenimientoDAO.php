@@ -42,7 +42,8 @@ class MantenimientoDAO {
                         "DireccionCliente"  => $row['direccion_oficina'],
                         "TelefonoCliente"    => $row['telefono'],
                         "NombreInv"         => $row['nomInv'],
-                        "NombreTipo"        => $row['nomTipo']
+                        "NombreTipo"        => $row['nomTipo'],
+                        "ValorPagado"       => $row['valor_pagado']
                     );
 		}
             }
@@ -189,6 +190,7 @@ class MantenimientoDAO {
                         . "nombre_tecnico = '".$inv->getNombreTecnico()."',"
                         . "motivo = '".$inv->getMotivo()."',"
                         . "observacion = '".$inv->getObservacion()."',"
+                        . "valor_pagado = ".$inv->getValorPagado()." ,"
                         . "ciudad = '".$inv->getCiudad()."' "
                         . "WHERE id = ".$id;
                 $sql = $conn->getConn()->prepare($sql_str);

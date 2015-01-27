@@ -35,7 +35,8 @@ class Detalle_PlanPagoDAO {
             if($conn->conectar()){
                 $sql_str = "UPDATE detalle_plan_pagos SET "
                         . "fecha_pagado = '".$det->getFechaPagado()."',"
-                        . "estado = ".$det->getEstado()." "
+                        . "estado = ".$det->getEstado().","
+                        . "valor_pagado = ".$det->getValorPagado()." "
                         . "WHERE id = ".$id;
                 $sql = $conn->getConn()->prepare($sql_str);
                 

@@ -5,8 +5,17 @@ class Historico {
     private $id;
     private $fecha;
     private $titulo;
+    private $tipo;
     private $observacion;
     private $idCliente;
+    
+    function getTipo() {
+        return $this->tipo;
+    }
+
+    function setTipo($tipo) {
+        $this->tipo = $tipo;
+    }
     
     function getId() {
         return $this->id;

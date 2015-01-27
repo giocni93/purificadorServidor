@@ -48,7 +48,10 @@ class Orden_pedidoDAO {
         $listaOrden = null;
         try{
             if($conn->conectar()){
-                $sql_str = "SELECT * FROM orden_pedido WHERE id_cliente = '".$cedula."' ORDER BY fecha DESC";
+                $sql_str = "SELECT DISTINCT op.* FROM orden_pedido op
+                            INNER JOIN plan_pagos pp ON (pp.id_orden_pedido = op.id)
+                            INNER JOIN detalle_plan_pagos dp ON (dp.id_plan_pagos = pp.id)
+                            WHERE dp.estado = 0 AND id_cliente = '".$cedula."' ORDER BY fecha DESC";
                 $sql = $conn->getConn()->prepare($sql_str);
                 $sql->execute();
                 $resultado = $sql->fetchAll();

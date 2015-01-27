@@ -16,6 +16,7 @@
         $h->setTitulo($p->titulo);
         $h->setObservacion($p->observacion);
         $h->setIdCliente($p->idCliente);
+        $h->setTipo($p->tipo);
         
         $res = $hDao->registrar($h);
         

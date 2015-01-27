@@ -16,6 +16,7 @@
         
         $d->setFechaPagado($fecha->format('Y-m-d'));
         $d->setEstado(true);
+        $d->setValorPagado($p->valorCuota);
         
         $res = $dDao->modificar($d,$id);
         
@@ -36,6 +37,7 @@
         $h->setObservacion("Se ha realizado el pago de la cuota correspondiente al orden de "
                           ."pedido # ".$idOrd." por valor de $".$val);
         $h->setIdCliente($id);
+        $h->setTipo("Pago cuota");
         
         $res = $hDao->registrar($h);
         

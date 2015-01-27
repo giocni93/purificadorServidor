@@ -8,7 +8,16 @@ class Detalle_PlanPago {
     private $fechaPagado;
     private $estado;
     private $idPlanPago;
-    
+    private  $valorPagado;
+            
+    function getValorPagado() {
+        return $this->valorPagado;
+    }
+
+    function setValorPagado($valorPagado) {
+        $this->valorPagado = $valorPagado;
+    }
+   
     function getId() {
         return $this->id;
     }
