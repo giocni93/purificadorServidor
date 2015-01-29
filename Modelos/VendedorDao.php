@@ -25,6 +25,52 @@ class VendedorDao {
         return $resultado;
     }
     
+    public function ModificarVendedor($ref,$id){
+        
+       $conn = new Conexion();
+       $res = -1;
+        try{
+            if($conn->conectar()){
+                $sql_str = "UPDATE vendedores SET "
+                        . "nombres = '".$ref->getNombres()."',"
+                        . "apellidos = '".$ref->getApellidos()."',"
+                        . "telefono = '".$ref->getTelefono()."' "
+                        . "WHERE cedula = ".$id;
+                $sql = $conn->getConn()->prepare($sql_str);
+                
+                $res = $sql->execute();
+            }
+            else{
+                $res = -2;
+            }
+        }catch(Exception $ex){
+            $this->msg_exception = $ex->getMessage();
+        }
+        $conn->desconectar();
+        return $res;
+        
+    }
+    
+    public function borrar($id){
+        $conn = new Conexion();
+        $res = -1;
+        try{
+            if($conn->conectar()){
+                $sql_str = "DELETE FROM vendedores WHERE cedula = ".$id;
+                $sql = $conn->getConn()->prepare($sql_str);
+                
+                $res = $sql->execute();
+            }
+            else{
+                $res = -2;
+            }
+        }catch(Exception $ex){
+            $this->msg_exception = $ex->getMessage();
+        }
+        $conn->desconectar();
+        return $res;
+    }
+    
     public function listaVendedores(){
         $conn = new Conexion();
         $listaVed = null;
@@ -41,7 +87,8 @@ class VendedorDao {
                     $listaVed[] = array(
                         "cedula"     => $ven->getCedula(),
                         "nombres"    => $ven->getNombres(),
-                        "apellidos"  => $ven->getApellidos()
+                        "apellidos"  => $ven->getApellidos(),
+                        "telefono"   => $ven->getTelefono()    
                     );
 		}
             }

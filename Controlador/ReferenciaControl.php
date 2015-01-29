@@ -57,7 +57,7 @@
     }
     
    
-   function modificarreferencia($id){
+    function modificarreferencia($id){
        
         $c = new Referencia();
         $cDao = new ReferenciaDao();

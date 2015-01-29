@@ -26,7 +26,7 @@ class ReferenciaDao {
         
     }
     
-     public function ModificarReferencia($ref,$id){
+    public function ModificarReferencia($ref,$id){
         
        $conn = new Conexion();
        $res = -1;
