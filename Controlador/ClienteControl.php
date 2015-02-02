@@ -25,8 +25,10 @@ function guardarcliente()
         $c->setNombre($p->nombre);
         $c->setApellido($p->apellido);
         $c->setDireccion_oficina($p->direccion_oficina);
+        $c->setDireccion_casa($p->direccion_casa);
         $c->setTelefono($p->telefono);
         $c->setEmail($p->email);
+        $c->setLabor($p->labor);
         
         $clien = $cliDao->RegistrarCliente($c);
         
