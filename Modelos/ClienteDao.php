@@ -9,7 +9,7 @@ class ClienteDao {
 
         if($conn->conectar()){
             
-            $sql_str = "Insert into cliente (cedula,nombre,apellido,direccion_oficina,direccion_casa,telefono,email) "
+            $sql_str = "Insert into cliente (cedula,nombre,apellido,direccion_oficina,direccion_casa,telefono,email,labor) "
                     ."values("
                     . "'" .$pu->getCedula() ."',"
                     . "'" .$pu->getNombre() ."',"
@@ -17,7 +17,8 @@ class ClienteDao {
                     . "'" .$pu->getDireccion_oficina() ."',"
                     . "'" .$pu->getDireccion_casa()."',"
                     . "'" .$pu->getTelefono() ."',"
-                    . "'" .$pu->getEmail() ."');";
+                    . "'" .$pu->getEmail() ."',"
+                    . "'" .$pu->getLabor() ."');";
             $sql = $conn->getConn()->prepare($sql_str);
             $resultado = $sql->execute();
         }

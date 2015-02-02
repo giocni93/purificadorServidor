@@ -10,7 +10,16 @@ class Cliente {
     private $direccion_casa;
     private $telefono;
     private $email;
+    private $labor;
     
+    function getLabor() {
+        return $this->labor;
+    }
+
+    function setLabor($labor) {
+        $this->labor = $labor;
+    }
+
     function getDireccion_casa() {
         return $this->direccion_casa;
     }
