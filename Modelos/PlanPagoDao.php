@@ -53,7 +53,7 @@ class PlanPagoDao {
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
         }
-        }
+    }
     
     public function listaplan_porOrden($id){
         $conn = new Conexion();

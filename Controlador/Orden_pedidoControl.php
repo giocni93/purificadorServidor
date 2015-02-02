@@ -35,6 +35,9 @@
     
     function guardarpedido(){
         
+        $man = new Mantenimiento();
+        $manDao = new MantenimientoDAO();
+        
         $fecha = new DateTime();
         
         $ordeDao = new Orden_pedidoDAO();
@@ -50,6 +53,17 @@
         $or->setFechaInstalacion($p->fechainstalacion);
         
         $ped = $ordeDao->RegistrarOrdePedido($or);
+        
+        $maxID = $ordeDao->capturaID();
+        
+        $man->setAsesor("");
+        $man->setFecha($fecha->format('Y-m-d'));
+        $man->setFechaProgramada(date("Y-m-d",  strtotime("+ 3 month",  strtotime($fecha->format('Y-m-d')))));
+        $man->setNombreTecnico("");
+        $man->setMotivo("");
+        $man->setCiudad("");
+        
+        $manDao->registrar($man, $maxID->getId());
         
         echo json_encode(array("estado"=>$ped));
         
