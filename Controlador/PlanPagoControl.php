@@ -15,6 +15,8 @@
 
     function guardarpago(){
         
+        $man = new Mantenimiento();
+        $manDao = new MantenimientoDAO();
         $plaDao = new PlanPagoDao();
         $pl = new PlanPago();
         $fechainstalacion = new DateTime();
@@ -49,6 +51,13 @@
            
            $detalle_plan_pago->RegistrarDetallePlanPago($d);
         }
+        $idorden = $orden->capturaID();
+        $man->setAsesor("");
+        $man->setFechaProgramada(date("Y-m-d",  strtotime("+"+3+" month",  strtotime($fecha->format('Y-m-d')))));
+        $man->setCiudad("");
+        $man->setNombreTecnico("");
+        $man->setFecha($fechainstalacion->format('Y-m-d'));
+        $manDao->registrar($man, $idorden);
 
         echo json_encode(array("estado"=>$plan));
 
