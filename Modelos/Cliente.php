@@ -7,8 +7,26 @@ class Cliente {
     private $nombre;
     private $apellido;
     private $direccion_oficina;
+    private $direccion_casa;
     private $telefono;
     private $email;
+    private $labor;
+    
+    function getLabor() {
+        return $this->labor;
+    }
+
+    function setLabor($labor) {
+        $this->labor = $labor;
+    }
+
+    function getDireccion_casa() {
+        return $this->direccion_casa;
+    }
+
+    function setDireccion_casa($direccion_casa) {
+        $this->direccion_casa = $direccion_casa;
+    }
     
     function getCedula() {
         return $this->cedula;
@@ -25,7 +43,7 @@ class Cliente {
     function getDireccion_oficina() {
         return $this->direccion_oficina;
     }
-
+    
     function getTelefono() {
         return $this->telefono;
     }
@@ -65,6 +83,8 @@ class Cliente {
         $this->direccion_oficina = $resul['direccion_oficina'];
         $this->telefono = $resul['telefono'];
         $this->email = $resul['email'];
+        $this->direccion_casa = $resul['direccion_casa'];
+        $this->labor = $resul['labor'];
     }
     
 }

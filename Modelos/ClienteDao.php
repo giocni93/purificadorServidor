@@ -97,7 +97,9 @@ class ClienteDao {
                         "apellido" => $cli->getApellido(),
                         "direccion_oficina" =>$cli->getDireccion_oficina(),
                         "telefono" =>$cli->getTelefono(),
-                        "email" =>$cli->getEmail()
+                        "email" =>$cli->getEmail(),
+                        "direccion_casa" =>$cli->getDireccion_casa(),
+                        "labor" =>$cli->getLabor()
                     );
 		}
             }
