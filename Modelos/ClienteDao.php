@@ -162,6 +162,7 @@ class ClienteDao {
             }
         }catch(Exception $ex){
             $this->msg_exception = $ex->getMessage();
+            return $this->msg_exception;
         }
         $conn->desconectar();
         return $listaCli;

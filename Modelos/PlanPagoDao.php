@@ -60,7 +60,7 @@ class PlanPagoDao {
         $listaOrden = null;
         try{
             if($conn->conectar()){
-                $sql_str = "SELECT p.*,d.valor_pagado,d.fecha_vencimiento,d.valor_cuota,d.fecha_pagado,d.estado,d.id as idDetalle,CONCAT(c.nombre,' ',c.apellido) as nomCli 
+                $sql_str = "SELECT p.*,d.valor_pagado,d.fecha_vencimiento,d.valor_cuota,d.fecha_pagado,d.estado,d.id as idDetalle,c.cedula,CONCAT(c.nombre,' ',c.apellido) as nomCli 
                             FROM plan_pagos as p INNER JOIN detalle_plan_pagos as d 
                             ON (p.id = d.id_plan_pagos)
                             INNER JOIN orden_pedido op ON (op.id = p.id_orden_pedido) 
@@ -85,7 +85,8 @@ class PlanPagoDao {
                         "Estado"            => $row['estado'],
                         "IdDetalle"         => $row['idDetalle'],
                         "NombreCliente"     => $row['nomCli'],
-                        "ValorPagado"       => $row['valor_pagado']
+                        "ValorPagado"       => $row['valor_pagado'],
+                        "Cedula"            => $row['cedula']
                     );
 		}
             }

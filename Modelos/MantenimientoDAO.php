@@ -110,6 +110,53 @@ class MantenimientoDAO {
         return $listaOrden;
     }
     
+    public function tareas_hoy(){
+        $conn = new Conexion();
+        $listaOrden = null;
+        try{
+            if($conn->conectar()){
+                $sql_str = "SELECT
+                            op.id as codigo,CONCAT(c.nombre,' ',c.apellido) as cliente,dp.fecha_vencimiento as fecha,'Pago' as tipo
+                            FROM
+                            cliente c
+                            INNER JOIN orden_pedido op 	     ON (op.id_cliente = c.cedula)
+                            INNER JOIN plan_pagos pp   	     ON (pp.id_orden_pedido = op.id)
+                            INNER JOIN detalle_plan_pagos dp ON (dp.id_plan_pagos = pp.id)
+                            WHERE
+                            dp.fecha_vencimiento <= NOW() AND dp.estado = 0
+                            UNION
+                            SELECT
+                            op.id as codigo,CONCAT(c.nombre,' ',c.apellido) as cliente,ma.fecha_programada as fecha,'Mantenimiento' as tipo
+                            FROM
+                            cliente c
+                            INNER JOIN orden_pedido op 	ON (op.id_cliente = c.cedula)
+                            INNER JOIN mantenimiento ma ON (ma.id_orden_pedido = op.id)
+                            WHERE
+                            ma.fecha_programada <= NOW() AND ma.fecha_realizacion IS NULL
+                            ORDER BY fecha DESC";
+                $sql = $conn->getConn()->prepare($sql_str);
+                $sql->execute();
+                $resultado = $sql->fetchAll();
+                foreach ($resultado as $row) {
+                    $listaOrden[] = array(
+                        "Codigo"        => $row['codigo'],
+                        "Fecha"         => $row['fecha'],
+                        "Cliente"       => $row['cliente'],
+                        "Tipo"          => $row['tipo']
+                    );
+		}
+            }
+            else{
+                
+            }
+        }catch(Exception $ex){
+            $this->msg_exception = $ex->getMessage();
+            return $this->msg_exception;
+        }
+        $conn->desconectar();
+        return $listaOrden;
+    }
+    
     public function listaMan($id){
         $conn = new Conexion();
         $listaOrden = null;

@@ -5,12 +5,21 @@
     $app->get('/mantenimiento/:id', 'getMan');
     $app->post('/mantenimiento/:idOrden', 'agregarMan');
     $app->put('/mantenimiento/:id/:idOrd', 'updateMan');
+    $app->get('/tareas_hoy', 'tareasHoy');
 
 
     function listaMan($id){
         $oDao = new MantenimientoDAO();
         
         $res = $oDao->listaMantenimiento($id);
+        
+        echo json_encode($res);
+    }
+    
+    function tareasHoy(){
+        $oDao = new MantenimientoDAO();
+        
+        $res = $oDao->tareas_hoy();
         
         echo json_encode($res);
     }
