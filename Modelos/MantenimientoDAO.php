@@ -126,7 +126,7 @@ class MantenimientoDAO {
                             dp.fecha_vencimiento <= NOW() AND dp.estado = 0
                             UNION
                             SELECT
-                            op.id as codigo,CONCAT(c.nombre,' ',c.apellido) as cliente,ma.fecha_programada as fecha,'Mantenimiento' as tipo
+                            ma.id as codigo,CONCAT(c.nombre,' ',c.apellido) as cliente,ma.fecha_programada as fecha,'Mantenimiento' as tipo
                             FROM
                             cliente c
                             INNER JOIN orden_pedido op 	ON (op.id_cliente = c.cedula)
