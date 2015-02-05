@@ -159,7 +159,7 @@ class Orden_pedidoDAO {
         $listaOrden = null;
         try{
             if($conn->conectar()){
-                $sql_str = "SELECT op.*, MAX(m.fecha_realizacion) as fechaVen
+                $sql_str = "SELECT op.*,m.fecha_realizacion, MAX(m.fecha_programada) as fechaVen 
                             FROM orden_pedido op LEFT JOIN mantenimiento m ON (m.id_orden_pedido = op.id) 
                             WHERE op.id_cliente = ".$cedula." 
                             GROUP BY id
@@ -175,17 +175,14 @@ class Orden_pedidoDAO {
                     
                     $estado = "<p style='color:green; margin: 0;'>Al dia</p>";
                     if($row['fechaVen'] != null){
-                        if($this->meses_transcurridos($row['fechaVen'] , $fecha_f) >= 6){
+                        
+                        if(($row['fechaVen'] <= $fecha_f) && (($row['fecha_realizacion'] == "0000-00-00 00:00:00") || ($row['fecha_realizacion'] == null) )){
                             $estado = "<p style='color:red; margin: 0;'>Vencido</p>";
                         }
-                    }else{
-                        if($row['fecha'] != null){
-                            if($this->meses_transcurridos($row['fecha'] , $fecha_f) >= 6){
-                                $estado = "<p style='color:red; margin: 0;'>Vencido</p>";
-                            }
-                        }else{
-                            $estado = "--";
-                        }
+                        /*
+                        if($this->meses_transcurridos($fecha_f,$row['fechaVen'] ) >= 6){
+                            $estado = "<p style='color:red; margin: 0;'>Vencido</p>";
+                        }*/
                     }
                     
                     $listaOrden[] = array(
@@ -268,7 +265,7 @@ class Orden_pedidoDAO {
             $datetime2 = new DateTime($datetime2->format("Y-m-d"));
             
             $interval = $datetime1->diff($datetime2);
-            return $interval->format('%m');
+            return $interval->format('%d');
     }
     
 }

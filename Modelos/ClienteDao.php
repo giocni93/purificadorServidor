@@ -118,7 +118,7 @@ class ClienteDao {
             $listaCli = null;
         try{
             if($conn->conectar()){
-                $sql_str = "SELECT c.*,MAX(m.fecha_realizacion) as fecha,op.fecha as fechaPedido  
+                $sql_str = "SELECT c.*,m.fecha_realizacion,MAX(m.fecha_programada) as fecha,op.fecha as fechaPedido  
                     FROM cliente c 
                     LEFT JOIN orden_pedido op ON (c.cedula = op.id_cliente) 
                     LEFT JOIN mantenimiento m ON (m.id_orden_pedido = op.id)
@@ -133,16 +133,8 @@ class ClienteDao {
                     $cli->mapear($row);
                     $estado = "<p style='color:green; margin: 0;'>Al dia</p>";
                     if($row['fecha'] != null){
-                        if($this->meses_transcurridos($row['fecha'] , $fecha_f) >= 6){
+                        if(($row['fecha'] <= $fecha_f) && (($row['fecha_realizacion'] == "0000-00-00 00:00:00") || ($row['fecha_realizacion'] == null))){
                             $estado = "<p style='color:red; margin: 0;'>Vencido</p>";
-                        }
-                    }else{
-                        if($row['fechaPedido'] != null){
-                            if($this->meses_transcurridos($row['fechaPedido'] , $fecha_f) >= 6){
-                                $estado = "<p style='color:red; margin: 0;'>Vencido</p>";
-                            }
-                        }else{
-                            $estado = "--";
                         }
                     }
                     
@@ -177,7 +169,7 @@ class ClienteDao {
             $datetime2 = new DateTime($datetime2->format("Y-m-d"));
             
             $interval = $datetime1->diff($datetime2);
-            return $interval->format('%m');
+            return $interval->format('%d');
     }
     
     
