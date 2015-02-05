@@ -4,6 +4,55 @@ class Orden_pedidoDAO {
     
     public $msg_exception;
     
+    public function update_date($id,$op){
+        $conn = new Conexion();
+        $res = -1;
+        try {
+            if($conn->conectar()){
+                $sql_str = "UPDATE orden_pedido SET "
+                        . "fecha_instalacion = '".$op->getFechaInstalacion()."' "
+                        . "WHERE id = ".$id.";";
+                $sql = $conn->getConn()->prepare($sql_str);
+                $res = $sql->execute();
+                                    
+            }else{
+                $res = -2;
+            }
+        } catch (Exception $ex) {
+            echo $ex->getTraceAsString();
+        }
+        $conn->desconectar();
+        return $res;
+    }
+
+    public function lista_mod_fecha(){
+        $conn = new Conexion();
+        $lista_mod_fecha= null;
+        try {
+            if($conn->conectar()){
+                $sql_str = "Select op.fecha_instalacion,op.id,concat(c.nombre,' ',c.apellido) as cliente,inv.nombre as "
+                        . "nombre_inv from orden_pedido op inner join cliente c "
+                        . "on (c.cedula = op.id_cliente) inner join inventario inv on (inv.id = op.id_inventario) "
+                        . "order by op.fecha_instalacion Desc";
+                $sql = $conn->getConn()->prepare($sql_str);
+                $sql->execute();
+                $resultado = $sql->fetchAll();
+                foreach ($resultado as $row){
+                    $orden = new Orden_pedido();
+                    $lista_mod_fecha[] = array(
+                        "id" => $row["id"],
+                        "fecha_instalacion" => $row["fecha_instalacion"],
+                        "cliente" => $row["cliente"],
+                        "nombre_inv" => $row["nombre_inv"]
+                    );
+                }
+            }
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+        }
+            $conn->desconectar();
+            return $lista_mod_fecha;
+    }
     
     public function Imprimir_orden_instalacion($id_cliente){
         $conn = new Conexion();

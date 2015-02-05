@@ -15,9 +15,6 @@
 
     function guardarpago(){
         
-        
-        
-        
         $plaDao = new PlanPagoDao();
         $pl = new PlanPago();
         $fechainstalacion = new DateTime();
@@ -42,13 +39,13 @@
         $max = $plaDao->capturaMaxID();
         $detalle_plan_pago = new Detalle_PlanPagoDAO();
         $fecha = new DateTime();
-        $vlCuota = $p->valorCuota;
+        //$vlCuota = $p->valorCuota;
         
         
         for($i=0; $i<$pl->getNumero_cuota(); $i++){
            $d = new Detalle_PlanPago();
            $d->setFechaVencimiento(date("Y-m-d", strtotime("+".$i." month", strtotime($fecha->format('Y-m-d')) )));
-           $d->setValorCuota($vlCuota);
+           $d->setValorCuota($p->valorCuota[$i]);
            $d->setEstado(0);
            $d->setIdPlanPago($max);
            

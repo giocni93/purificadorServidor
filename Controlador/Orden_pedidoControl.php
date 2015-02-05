@@ -4,8 +4,30 @@
     $app->get('/orden_pedido/idcedula/:id_cliente', 'imprimir_orden');
     $app->get('/orden_pedido/clienteMan/:cedula', 'listaOrdMan');
     $app->get('/orden_pedido/idOrden/:id', 'listaOrdenFull');
+    $app->get('/ordenpedido','lista_mod_fecha');
+    $app->put('/ordenpedido/:id','update_date');
     
-   
+    function update_date($id){
+        
+        $op = new Orden_pedido();
+        $oDao = new Orden_pedidoDAO();
+        
+        $r = \Slim\Slim::getInstance()->request(); //pedimos a Slim que nos mande el request
+        $p = json_decode($r->getBody()); //como el request esta en json lo decodificamos
+        
+        $op->setFechaInstalacion($p->fechaInstalacion);
+        $res = $oDao->update_date($id, $op);
+        
+        echo json_encode(array("estado"=>$res));
+    }
+    
+    function lista_mod_fecha(){
+        $oDao = new Orden_pedidoDAO();
+        
+        $res = $oDao->lista_mod_fecha();
+        
+        echo json_encode($res);
+    }
 
     function listaOrd($cedula){
         $oDao = new Orden_pedidoDAO();
