@@ -85,7 +85,7 @@
         $man->setMotivo("");
         $man->setCiudad("");
         
-        $manDao->registrar($man, $maxID->getId());
+        $manDao->registrar($man, $maxID->getId(),null);
         
         echo json_encode(array("estado"=>$ped));
         

@@ -249,6 +249,7 @@ class Orden_pedidoDAO {
             $resultado = $sql->execute();
         }
         else{
+            $resultado = -2;
             $this->msgError = "error al conectar con la base de datos";
         }
         $conn->desconectar();
