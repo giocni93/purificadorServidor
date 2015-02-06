@@ -1,7 +1,9 @@
 <?php
     
     $app->get('/mantenimiento/idOrden/:id', 'listaMan');
+    $app->get('/mantenimiento/idCliente/:id', 'listaManExt');
     $app->get('/mantenimiento/idMan/:id', 'listaMan_id');
+    $app->get('/mantenimiento/idManExt/:id', 'listaMan_idExt');
     $app->get('/mantenimiento/:id', 'getMan');
     $app->post('/mantenimiento/:idOrden', 'agregarMan');
     $app->put('/mantenimiento/:id/:idOrd', 'updateMan');
@@ -12,6 +14,13 @@
         $oDao = new MantenimientoDAO();
         
         $res = $oDao->listaMantenimiento($id);
+        
+        echo json_encode($res);
+    }
+    function listaManExt($id){
+        $oDao = new MantenimientoDAO();
+        
+        $res = $oDao->listaMantenimiento2($id);
         
         echo json_encode($res);
     }
@@ -28,6 +37,14 @@
         $oDao = new MantenimientoDAO();
         
         $res = $oDao->listaMantenimiento_id($id);
+        
+        echo json_encode($res);
+    }
+    
+    function listaMan_idExt($id){
+        $oDao = new MantenimientoDAO();
+        
+        $res = $oDao->listaMantenimiento_id2($id);
         
         echo json_encode($res);
     }
@@ -60,6 +77,10 @@
             $m->setValorPagado(0);
         }
         
+        if($m->getFechaRealizacion() == ""){
+            $m->setFechaRealizacion(null);
+        }
+        
         $res = $oDao->update($m,$id);
         
         echo json_encode($res);
@@ -89,7 +110,7 @@
         $m->setNombreTecnico($p->nombreTecnico);
         $m->setFecha($fecha->format('Y-m-d'));
         
-        $res = $oDao->registrar($m,$idOrden);
+        $res = $oDao->registrar($m,$idOrden,$p->idCliente);
         
         echo json_encode($res);
         
@@ -109,6 +130,28 @@
         $h->setTitulo("Nueva orden de mantenimiento");
         $h->setObservacion("Se ha realizado una nueva orden de mantenimiento correspondiente al "
                 . "orden de pedido # ".$idOrd." con el siguiente motivo: \n\n".$motivo);
+        $h->setIdCliente($id);
+        $h->setTipo("Matenimiento");
+        
+        $res = $hDao->registrar($h);
+        
+        //echo json_encode(array("estado"=>$res));
+
+        //$fecha = new DateTime();
+        //echo $fecha->format('Y-m-d H:i:s') . "\n";
+        
+        //echo date("Y-m-d h:i A", strtotime("2013-01-19 15:42:00"));
+    }
+    
+    function registrarHistoMan2($id,$motivo)
+    {
+        $h = new Historico();
+        $hDao = new HistoricoDAO();
+        $fecha = new DateTime();
+
+        $h->setFecha($fecha->format('Y-m-d H:i:s'));
+        $h->setTitulo("Nueva orden de mantenimiento");
+        $h->setObservacion("Se ha realizado una nueva orden de mantenimiento con el siguiente motivo: \n\n".$motivo);
         $h->setIdCliente($id);
         $h->setTipo("Matenimiento");
         

@@ -33,6 +33,17 @@
                 $sql = $conn->getConn()->prepare($sql_str);
                 $sql->execute();
                 $resultado = $sql->fetchAll();
+                if(count($resultado) == 0){
+                    $sql_str = "SELECT m.*,'--' as nombreInv,'--' as nombreTipo,CONCAT(c.nombre,' ',c.apellido) as nombreCliente,
+                            c.direccion_casa as direccion_oficina,c.telefono 
+                            FROM mantenimiento m 
+                            INNER JOIN cliente c ON (c.cedula = m.id_cliente)
+                            WHERE m.id = ".$idM;
+                
+                    $sql = $conn->getConn()->prepare($sql_str);
+                    $sql->execute();
+                    $resultado = $sql->fetchAll();
+                }
 
             }
     // ########################################
