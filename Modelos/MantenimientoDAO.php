@@ -265,6 +265,125 @@ class MantenimientoDAO {
         return $listaOrden;
     }
     
+    public function consultas($fi,$ff){
+        $conn = new Conexion();
+        $listaOrden = null;
+        
+        try{
+            if($conn->conectar()){
+                $sql_str = "SELECT
+                            op.id as codigo,CONCAT(c.nombre,' ',c.apellido) as cliente,dp.fecha_pagado as fecha,'Pago' as tipo,dp.valor_pagado as valor 
+                            FROM
+                            cliente c
+                            INNER JOIN orden_pedido op 	     ON (op.id_cliente = c.cedula)
+                            INNER JOIN plan_pagos pp   	     ON (pp.id_orden_pedido = op.id)
+                            INNER JOIN detalle_plan_pagos dp ON (dp.id_plan_pagos = pp.id)
+                            WHERE
+                            dp.estado = 1 AND dp.fecha_pagado BETWEEN '".$fi."' AND '".$ff."'
+                            UNION
+                            SELECT
+                            ma.id as codigo,CONCAT(c.nombre,' ',c.apellido) as cliente,ma.fecha_realizacion as fecha,'Mantenimiento' as tipo,ma.valor_pagado as valor
+                            FROM
+                            cliente c
+                            INNER JOIN orden_pedido op 	ON (op.id_cliente = c.cedula)
+                            INNER JOIN mantenimiento ma ON (ma.id_orden_pedido = op.id)
+                            WHERE
+                            ma.fecha_realizacion IS NOT NULL AND ma.fecha_realizacion BETWEEN '".$fi."' AND '".$ff."'
+                            UNION
+                            SELECT
+                            ma.id as codigo,CONCAT(c.nombre,' ',c.apellido) as cliente,ma.fecha_realizacion as fecha,'Mantenimiento' as tipo,ma.valor_pagado as valor
+                            FROM
+                            cliente c
+                            INNER JOIN mantenimiento ma ON (ma.id_cliente = c.cedula)
+                            WHERE
+                            ma.fecha_realizacion IS NOT NULL AND ma.fecha_realizacion BETWEEN '".$fi."' AND '".$ff."'
+                            ORDER BY fecha DESC";
+                
+                if(($ff == "" || $ff == null) && ($fi != "" || $fi != null)){
+                    $sql_str = "SELECT
+                            op.id as codigo,CONCAT(c.nombre,' ',c.apellido) as cliente,dp.fecha_pagado as fecha,'Pago' as tipo,dp.valor_pagado as valor 
+                            FROM
+                            cliente c
+                            INNER JOIN orden_pedido op 	     ON (op.id_cliente = c.cedula)
+                            INNER JOIN plan_pagos pp   	     ON (pp.id_orden_pedido = op.id)
+                            INNER JOIN detalle_plan_pagos dp ON (dp.id_plan_pagos = pp.id)
+                            WHERE
+                            dp.estado = 1 AND dp.fecha_pagado >= '".$fi."' 
+                            UNION
+                            SELECT
+                            ma.id as codigo,CONCAT(c.nombre,' ',c.apellido) as cliente,ma.fecha_realizacion as fecha,'Mantenimiento' as tipo,ma.valor_pagado as valor
+                            FROM
+                            cliente c
+                            INNER JOIN orden_pedido op 	ON (op.id_cliente = c.cedula)
+                            INNER JOIN mantenimiento ma ON (ma.id_orden_pedido = op.id)
+                            WHERE
+                            ma.fecha_realizacion IS NOT NULL AND ma.fecha_realizacion >= '".$fi."'
+                            UNION
+                            SELECT
+                            ma.id as codigo,CONCAT(c.nombre,' ',c.apellido) as cliente,ma.fecha_realizacion as fecha,'Mantenimiento' as tipo,ma.valor_pagado as valor
+                            FROM
+                            cliente c
+                            INNER JOIN mantenimiento ma ON (ma.id_cliente = c.cedula)
+                            WHERE
+                            ma.fecha_realizacion IS NOT NULL AND ma.fecha_realizacion >= '".$fi."'
+                            ORDER BY fecha DESC";
+                }
+                
+                if(($ff == "" || $ff == null) && ($fi == "" || $fi == null)){
+                    $sql_str = "SELECT
+                            op.id as codigo,CONCAT(c.nombre,' ',c.apellido) as cliente,dp.fecha_pagado as fecha,'Pago' as tipo,dp.valor_pagado as valor 
+                            FROM
+                            cliente c
+                            INNER JOIN orden_pedido op 	     ON (op.id_cliente = c.cedula)
+                            INNER JOIN plan_pagos pp   	     ON (pp.id_orden_pedido = op.id)
+                            INNER JOIN detalle_plan_pagos dp ON (dp.id_plan_pagos = pp.id)
+                            WHERE
+                            dp.estado = 1 
+                            UNION
+                            SELECT
+                            ma.id as codigo,CONCAT(c.nombre,' ',c.apellido) as cliente,ma.fecha_realizacion as fecha,'Mantenimiento' as tipo,ma.valor_pagado as valor
+                            FROM
+                            cliente c
+                            INNER JOIN orden_pedido op 	ON (op.id_cliente = c.cedula)
+                            INNER JOIN mantenimiento ma ON (ma.id_orden_pedido = op.id)
+                            WHERE
+                            ma.fecha_realizacion IS NOT NULL 
+                            UNION
+                            SELECT
+                            ma.id as codigo,CONCAT(c.nombre,' ',c.apellido) as cliente,ma.fecha_realizacion as fecha,'Mantenimiento' as tipo,ma.valor_pagado as valor
+                            FROM
+                            cliente c
+                            INNER JOIN mantenimiento ma ON (ma.id_cliente = c.cedula)
+                            WHERE
+                            ma.fecha_realizacion IS NOT NULL 
+                            ORDER BY fecha DESC";
+                }
+                
+                $sql = $conn->getConn()->prepare($sql_str);
+                $sql->execute();
+                $resultado = $sql->fetchAll();
+                foreach ($resultado as $row) {
+                    $fecha = new DateTime($row['fecha']);
+                    $listaOrden[] = array(
+                        "Codigo"        => $row['codigo'],
+                        "Fecha"         => $fecha->format('Y-m-d'),
+                        "Cliente"       => $row['cliente'],
+                        "Tipo"          => $row['tipo'],
+                        "Valor"         => $row['valor']
+                    );
+		}
+            }
+            else{
+                
+            }
+        }catch(Exception $ex){
+            $this->msg_exception = $ex->getMessage();
+            return $this->msg_exception;
+        }
+        $conn->desconectar();
+        return $listaOrden;
+    }
+    
     public function listaMan($id){
         $conn = new Conexion();
         $listaOrden = null;

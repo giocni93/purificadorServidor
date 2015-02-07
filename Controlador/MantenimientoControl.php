@@ -8,6 +8,7 @@
     $app->post('/mantenimiento/:idOrden', 'agregarMan');
     $app->put('/mantenimiento/:id/:idOrd', 'updateMan');
     $app->get('/tareas_hoy', 'tareasHoy');
+    $app->post('/consultas', 'consultas');
 
 
     function listaMan($id){
@@ -29,6 +30,19 @@
         $oDao = new MantenimientoDAO();
         
         $res = $oDao->tareas_hoy();
+        
+        echo json_encode($res);
+    }
+    
+    function consultas(){
+        $oDao = new MantenimientoDAO();
+        $r = \Slim\Slim::getInstance()->request(); //pedimos a Slim que nos mande el request
+        $p = json_decode($r->getBody()); //como el request esta en json lo decodificamos
+        
+        $fi = $p->fi;
+        $ff = $p->ff;
+        
+        $res = $oDao->consultas($fi,$ff);
         
         echo json_encode($res);
     }
